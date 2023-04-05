@@ -8,7 +8,7 @@ const AppLayout = () => {
   return (
     <Layout>
       <Header />
-      <Content>
+      <Content style={{ padding: "0 50px" }}>
         <Outlet />
       </Content>
     </Layout>

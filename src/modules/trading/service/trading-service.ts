@@ -1,7 +1,7 @@
 import derivService from "common/services/deriv.service";
 import { generateRandomId } from "common/utils/";
 import responseUtil from "common/utils/response.util";
-import requestTransformer from "modules/trading/service/request-transformer";
+import requestTransformer from "modules/trading/service/response-transformer";
 
 export interface IRequestPayloadForActiveSymbols {
   activeSymbols: string;

@@ -1,11 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useQuery } from "react-query";
+import styled from "styled-components";
 import { Skeleton } from "antd";
-import derivUtility from "common/services/deriv.service";
 import tradingService from "modules/trading/service/trading-service";
-import { useSearchParams } from "react-router-dom";
+import businessLayer from "modules/trading/business/tradingBusinessLayer";
+import { Tabs } from "common/components/Tabs.component";
+import { Row, Col } from "antd";
 
 const TradingPage = () => {
+  useEffect(() => {});
+
   const { isLoading, error, data } = useQuery<any>(["retrieveSymbols"], () => {
     const payload = {
       activeSymbols: "brief",
@@ -13,15 +17,17 @@ const TradingPage = () => {
     };
     return tradingService.retrieveSymbols(payload);
   });
-  useEffect(() => {
-    derivUtility.socketConnection.addEventListener("open", () => {
-      console.log("open connection");
-    });
-  }, []);
+
+  const activeSymbols = useMemo(() => {
+    return businessLayer.prepareActiveSymbolApiResponseForView(data);
+  }, [data]);
+
+  useEffect(() => {});
+
   return (
     <div>
-      <Skeleton loading={true} paragraph={{ rows: 3 }} title={false}>
-        <div>home Page</div>
+      <Skeleton loading={isLoading} paragraph={{ rows: 3 }} title={false}>
+        <Tabs defaultActiveKey="1" items={activeSymbols} onChange={() => {}} />
       </Skeleton>
     </div>
   );
