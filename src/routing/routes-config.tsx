@@ -9,7 +9,7 @@ export interface IRouteConfig {
 const routesConfig: IRouteConfig[] = [
   {
     path: ROUTES.HOME,
-    component: lazy(() => import("../modules/trading/page/trading")),
+    component: lazy(() => import("../modules/trading/page/Trading.page")),
   },
 ];
 

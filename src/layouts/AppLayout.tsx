@@ -6,12 +6,12 @@ const { Content } = Layout;
 
 const AppLayout = () => {
   return (
-    <Layout>
+    <>
       <Header />
-      <Content style={{ padding: "0 50px" }}>
+      <Content>
         <Outlet />
       </Content>
-    </Layout>
+    </>
   );
 };
 

@@ -1,10 +1,7 @@
 import { FunctionComponent, useEffect } from "react";
-import { Layout, Col, Row } from "antd";
+import AppBar from "@mui/material/AppBar";
 import DerivLogo from "assets/images/logo.png";
 import styled from "styled-components";
-import derivUtility from "common/services/deriv.service";
-
-const { Header } = Layout;
 
 interface IProps {
   className?: string;
@@ -12,15 +9,18 @@ interface IProps {
 
 const HeaderComponent: FunctionComponent<IProps> = ({ className }: IProps) => {
   return (
-    <Header className={className}>
+    <AppBar className={className} position="static">
       <div className="logo_wrapper">
         <img src={DerivLogo} />
       </div>
-    </Header>
+    </AppBar>
   );
 };
 
 export default styled(HeaderComponent)`
+  background: #001529 !important;
+  padding: 20px 50px;
+  box-shadow: none !important;
   .logo_wrapper {
     width: 160px;
     display: flex;

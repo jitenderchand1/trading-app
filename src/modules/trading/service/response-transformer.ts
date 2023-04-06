@@ -1,5 +1,6 @@
 import map from "lodash/map";
 import { ISymbol } from "common/models/symbol.model";
+import { ISymbolTrade } from "common/models/symol-trade";
 
 class RequestTransformer {
   static activeSymbolApiResponseTransformer(data: any): ISymbol[] {
@@ -23,6 +24,17 @@ class RequestTransformer {
     });
 
     return symbols;
+  }
+
+  static symbolStreamTransformer(symbol: string, data: any): ISymbolTrade {
+    return {
+      symbol,
+      timestamp: data.ohlc.epoch,
+      open: parseFloat(data.ohlc.open),
+      close: parseFloat(data.ohlc.close),
+      high: parseFloat(data.ohlc.high),
+      low: parseFloat(data.ohlc.low),
+    };
   }
 }
 
