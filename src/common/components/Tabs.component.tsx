@@ -2,7 +2,6 @@ import { FunctionComponent } from "react";
 import MiTab, { TabProps } from "@mui/material/Tab";
 import styled from "styled-components";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
 interface ITabsProps extends TabProps {
   className?: string;
@@ -11,18 +10,42 @@ interface ITabsProps extends TabProps {
 export const TabComponent: FunctionComponent<ITabsProps> = (
   props: ITabsProps
 ) => {
-  return <MiTab className={props.className} {...props} />;
+  return (
+    <div className={props.className}>
+      <MiTab {...props} />
+    </div>
+  );
 };
 
-export const Tab = styled(TabComponent)``;
+export const Tab = styled(TabComponent)`
+  .MuiBox-root {
+    background: red;
+  }
+`;
 
 export const SubTabsComponent: FunctionComponent<ITabsProps> = (
   props: ITabsProps
 ) => {
-  return <MiTab className={props.className} {...props} />;
+  return (
+    <div className={props.className}>
+      <MiTab {...props} />
+    </div>
+  );
 };
 
 export const SubTabs = styled(SubTabsComponent)`
+  .MuiTabs-root {
+    min-height: auto;
+  }
+  .MuiTab-root {
+    padding: 5px 15px !important;
+    min-height: auto;
+  }
+  .Mui-selected {
+    background: #ff444f !important;
+    color: white !important;
+    border-radius: 20px;
+  }
   .ant-tabs-tab-active {
     .ant-tabs-tab-btn {
       background: #ff444f;
@@ -50,8 +73,8 @@ const TabPanelComponent = (props: TabPanelProps) => {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        <Box sx={{ pt: 4 }}>
+          <Box>{children}</Box>
         </Box>
       )}
     </div>

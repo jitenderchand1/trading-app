@@ -100,10 +100,8 @@ class TradingService {
               messageReceiveCallback
             );
           }
-          const transformedData = responseTransformer.symbolStreamTransformer(
-            tickHistoryRequestPayload.ticks_history,
-            data
-          );
+          const transformedData =
+            responseTransformer.symbolStreamTransformer(data);
           successCallback(transformedData);
         }
       } catch (error) {
@@ -119,11 +117,10 @@ class TradingService {
         await tickSubscriber();
       },
       unsubscribe: async () => {
-        console.log("unsubscribe from service");
-        derivService.socketConnection.removeEventListener(
-          "message",
-          messageReceiveCallback
-        );
+        // derivService.socketConnection.removeEventListener(
+        //   "message",
+        //   messageReceiveCallback
+        // );
         await tickSubscriber().unsubscribe();
       },
     };

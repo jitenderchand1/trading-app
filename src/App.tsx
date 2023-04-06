@@ -1,5 +1,4 @@
 import { BrowserRouter } from "react-router-dom";
-import { ConfigProvider } from "antd";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AppRoutes from "routing/routes";
@@ -18,11 +17,9 @@ function App() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={client}>
-        <ConfigProvider>
-          <ThemeProvider theme={theme}>
-            <AppRoutes />
-          </ThemeProvider>
-        </ConfigProvider>
+        <ThemeProvider theme={theme}>
+          <AppRoutes />
+        </ThemeProvider>
       </QueryClientProvider>
     </BrowserRouter>
   );

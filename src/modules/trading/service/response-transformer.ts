@@ -26,9 +26,8 @@ class RequestTransformer {
     return symbols;
   }
 
-  static symbolStreamTransformer(symbol: string, data: any): ISymbolTrade {
+  static symbolStreamTransformer(data: any): ISymbolTrade {
     return {
-      symbol,
       timestamp: data.ohlc.epoch,
       open: parseFloat(data.ohlc.open),
       close: parseFloat(data.ohlc.close),

@@ -4,7 +4,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TradingService from "../service/trading-service";
 import { ISymbolTrade } from "common/models/symol-trade";
-import { Button } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import UpArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DownArrowIcon from "@mui/icons-material/KeyboardArrowDown";
 
@@ -36,18 +36,23 @@ const TradingHistoryRealTime = (props: IProps) => {
       errorCallback
     );
     subscribe();
+    console.log("subscribe");
     return () => {
       console.log("unsubscribe");
       unsubscribe();
     };
-  }, []);
+  }, [symbol]);
 
   const priceUpdate = tradingData?.close ?? 0 - (tradingData?.open ?? 0);
 
   return (
     <TableRow>
-      <TableCell>{tradingData?.symbol}</TableCell>
-      <TableCell>{tradingData?.close}</TableCell>
+      <TableCell>{symbol.display_name}</TableCell>
+      <TableCell>
+        {tradingData?.close ?? (
+          <Skeleton variant="rounded" width={100} height={20} />
+        )}
+      </TableCell>
       <TableCell>c</TableCell>
       <TableCell>d</TableCell>
       <TableCell align="right">

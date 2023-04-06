@@ -3,7 +3,6 @@ import map from "lodash/map";
 import findIndex from "lodash/findIndex";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { Skeleton } from "antd";
 import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
 import { useSearchParams } from "react-router-dom";
@@ -12,12 +11,14 @@ import { IMarket } from "common/models/trading-market.model";
 import TradingService from "modules/trading/service/trading-service";
 import businessLayer from "modules/trading/business/tradingBusinessLayer";
 import Divider from "@mui/material/Divider";
+import { grey } from "@mui/material/colors";
 
 import TradingSymbols from "modules/trading/components/TradingSymbols.component";
 
 const TradingPage = () => {
   const [parentTabSelectedIndex, setParentTabSelectedIndex] = useState(0);
-  useEffect(() => {});
+
+  const [childTabSelectedIndex, setChildTabSelectedIndex] = useState(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -42,90 +43,85 @@ const TradingPage = () => {
     });
   };
 
-  useEffect(() => {
-    const selectIndex = findIndex(activeSymbols, {
-      key: searchParams.get("market") || undefined,
+  const _handleChildTabChange = (
+    event: React.SyntheticEvent,
+    newValue: number
+  ) => {
+    setSearchParams({
+      submarket: activeSymbols[parentTabSelectedIndex].subMarkets[newValue].key,
     });
-    setParentTabSelectedIndex(selectIndex < 0 ? 0 : selectIndex);
+  };
+
+  useEffect(() => {
+    if (activeSymbols.length) {
+      const selectIndex = findIndex(activeSymbols, {
+        key: searchParams.get("market") || undefined,
+      });
+      setParentTabSelectedIndex(selectIndex < 0 ? 0 : selectIndex);
+
+      const selectChildIndex = findIndex(
+        activeSymbols[parentTabSelectedIndex].subMarkets,
+        {
+          key: searchParams.get("submarket") || undefined,
+        }
+      );
+      setChildTabSelectedIndex(selectChildIndex < 0 ? 0 : selectChildIndex);
+    }
   }, [searchParams, activeSymbols]);
 
   return (
     <div>
-      <Skeleton loading={isLoading} paragraph={{ rows: 3 }} title={false}>
-        <Box className="page-content ">
-          <Tabs
-            value={parentTabSelectedIndex}
-            onChange={_handleParentTabChange}
-          >
-            {map(activeSymbols, (datum, index) => {
-              return <Tab label={datum.label} key={datum.key} value={index} />;
-            })}
-          </Tabs>
-        </Box>
-        <Divider />
-        {map(activeSymbols, (datum, index) => {
-          return (
-            <TabPanel
-              key={datum.key}
-              value={parentTabSelectedIndex}
-              index={index}
-            >
-              {map(datum.subMarkets, (datum, index) => {
-                return (
-                  <Tabs value>
-                    <Tab label={datum.label} key={datum.key} value={index} />
-                  </Tabs>
-                );
-              })}
-            </TabPanel>
-          );
-        })}
-        {/* <Tabs
-          defaultActiveKey="1"
-          renderTabBar={(tabBarProps, DefaultTabBar) => {
-            return (
-              <DefaultTabBar {...tabBarProps} className="page-content page-bg">
-                {(node) => node}
-              </DefaultTabBar>
-            );
-          }}
-          onChange={(a) => {
-            console.log(a);
-          }}
-          items={map(activeSymbols, (datum, index) => {
-            return {
-              ...datum,
-              children: (
-                <div style={{ paddingTop: "20px" }}>
-                  <SubTabs
-                    key={index}
-                    items={map(datum.subMarkets, (datum) => {
-                      return {
-                        ...datum,
-                        children: (
-                          <div key={datum.key} style={{ paddingTop: "20px" }}>
-                            <TradingSymbols symbols={datum.symbols} />
-                          </div>
-                        ),
-                      };
-                    })}
-                    renderTabBar={(tabBarProps, DefaultTabBar) => {
-                      return (
-                        <DefaultTabBar
-                          {...tabBarProps}
-                          className="page-content "
-                        >
-                          {(node) => node}
-                        </DefaultTabBar>
-                      );
-                    }}
-                  />
-                </div>
-              ),
-            };
+      <Box className="page-content" bgcolor={grey[100]}>
+        <Tabs value={parentTabSelectedIndex} onChange={_handleParentTabChange}>
+          {map(activeSymbols, (datum, index) => {
+            return <Tab label={datum.label} key={datum.key} value={index} />;
           })}
-        /> */}
-      </Skeleton>
+        </Tabs>
+      </Box>
+      <Divider />
+      {map(activeSymbols, (datum, index) => {
+        return (
+          <TabPanel
+            key={datum.key}
+            value={parentTabSelectedIndex}
+            index={index}
+          >
+            <Box className="page-content">
+              <Tabs
+                value={childTabSelectedIndex}
+                TabIndicatorProps={{ style: { display: "none" } }}
+                style={{
+                  minHeight: "auto",
+                }}
+                onChange={_handleChildTabChange}
+              >
+                {map(datum.subMarkets, (datum, index) => {
+                  return (
+                    <SubTabs
+                      label={datum.label}
+                      key={datum.key}
+                      value={index}
+                    />
+                  );
+                })}
+              </Tabs>
+            </Box>
+            {map(datum.subMarkets, (datum, index) => {
+              return (
+                <TabPanel
+                  key={datum.key}
+                  value={childTabSelectedIndex}
+                  index={index}
+                >
+                  <div key={datum.key} className="page-content">
+                    <TradingSymbols symbols={datum.symbols} />
+                  </div>
+                </TabPanel>
+              );
+            })}
+          </TabPanel>
+        );
+      })}
     </div>
   );
 };

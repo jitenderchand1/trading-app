@@ -1,13 +1,9 @@
-import { Skeleton, Typography } from "antd";
-
-const { Title } = Typography;
+import { Skeleton } from "@mui/material";
 
 export const PageLoadingIndicator = () => {
   return (
     <>
-      <Skeleton>
-        <Title>Loading...</Title>
-      </Skeleton>
+      <Skeleton />
     </>
   );
 };
