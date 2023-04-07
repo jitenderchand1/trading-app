@@ -2,7 +2,7 @@
   "name": "deriv-trading-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://jitenderchand1.github.io/trading-app",
+  "homepage": "https://jitenderchand1.github.io",
   "dependencies": {
     "@deriv/deriv-api": "^1.0.11",
     "@emotion/react": "^11.10.6",
