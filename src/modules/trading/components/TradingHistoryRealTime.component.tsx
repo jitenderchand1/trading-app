@@ -28,7 +28,6 @@ const TradingHistoryRealTime = (props: IProps) => {
     error,
     data: tradeHistory,
   } = useQuery<ICandle[]>(["retrieveTicksHistory", symbol.symbol], () => {
-    console.log("adf");
     const startTime = moment().subtract(24, "hour").unix();
     const payload = {
       ticks_history: symbol.symbol,
@@ -64,23 +63,37 @@ const TradingHistoryRealTime = (props: IProps) => {
   }, [symbol]);
 
   let priceDifference = 0;
+
   if (tradeHistory && latestTradingData) {
     const closingPrice = tradeHistory?.[0].close ?? 0;
     const latestPrice = latestTradingData?.close ?? 0;
     priceDifference = latestPrice - closingPrice;
+  }
+  if (tradeHistory?.length && !latestTradingData) {
+    priceDifference =
+      tradeHistory[tradeHistory.length - 1].close - tradeHistory[0].close;
   }
 
   return (
     <TableRow>
       <TableCell width="20%">{symbol.display_name}</TableCell>
       <TableCell width="20%">
-        {latestTradingData?.close.toFixed(4) ?? (
-          <Skeleton variant="rounded" width={100} height={20} />
-        )}
+        {latestTradingData?.close.toFixed(4) ??
+          tradeHistory?.[tradeHistory.length - 1]?.close.toFixed(4) ?? (
+            <Skeleton variant="rounded" width={100} height={20} />
+          )}
       </TableCell>
       <TableCell width="20%">
-        {tradeHistory && latestTradingData ? (
-          <Box color={priceDifference > 0 ? green[500] : red[500]}>
+        {tradeHistory || latestTradingData ? (
+          <Box
+            color={
+              priceDifference > 0
+                ? green[500]
+                : priceDifference < 0
+                ? red[500]
+                : "black"
+            }
+          >
             {priceDifference > 0 ? (
               <Stack direction="row">
                 <Box>
@@ -88,11 +101,15 @@ const TradingHistoryRealTime = (props: IProps) => {
                 </Box>
                 <Typography>{priceDifference.toFixed(4)}</Typography>
               </Stack>
-            ) : (
+            ) : priceDifference < 0 ? (
               <Stack direction="row">
                 <Box>
                   <DownArrowIcon />
                 </Box>
+                <Typography>{priceDifference.toFixed(4)}</Typography>
+              </Stack>
+            ) : (
+              <Stack direction="row">
                 <Typography>{priceDifference.toFixed(4)}</Typography>
               </Stack>
             )}
@@ -102,7 +119,7 @@ const TradingHistoryRealTime = (props: IProps) => {
         )}
       </TableCell>
       <TableCell width="20%">
-        {tradeHistory && latestTradingData ? (
+        {tradeHistory ? (
           <Chart
             tradingHistory={tradeHistory}
             priceDifference={priceDifference}

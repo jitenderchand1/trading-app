@@ -56,13 +56,13 @@ const TradingPage = () => {
     newValue: number
   ) => {
     setSearchParams({
+      market: activeSymbols[parentTabSelectedIndex].key,
       submarket: activeSymbols[parentTabSelectedIndex].subMarkets[newValue].key,
     });
   };
 
   useEffect(() => {
     const _handleSocketConnectionError = () => {
-      console.log("asdsf");
       setConnectionErrorState(true);
     };
     deriveService.socketConnection.addEventListener(
@@ -93,7 +93,7 @@ const TradingPage = () => {
       setChildTabSelectedIndex(selectChildIndex < 0 ? 0 : selectChildIndex);
     }
   }, [searchParams, activeSymbols]);
-  console.log("isLoading", error);
+
   return (
     <div>
       {error || isConnectionLost ? (

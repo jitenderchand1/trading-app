@@ -94,9 +94,6 @@ class TradingService {
       const messageReceiveCallback = (message: MessageEvent<any>) => {
         try {
           const data = JSON.parse(message.data);
-          console.log("apiQueryParam", apiQueryParam.ticks_history);
-          console.log("req", req_id);
-          console.log("data", data);
           const messageType = "candles";
           const response = responseUtil.validateResponse({
             data,
@@ -116,6 +113,7 @@ class TradingService {
               "message",
               messageReceiveCallback
             );
+
             resolve(data.candles);
           }
         } catch (error) {
