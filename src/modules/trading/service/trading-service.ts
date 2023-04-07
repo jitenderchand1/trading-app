@@ -1,6 +1,7 @@
 import derivService from "common/services/deriv.service";
 import { generateRandomId } from "common/utils/";
 import responseUtil from "common/utils/response.util";
+import { Observable, BehaviorSubject } from "rxjs";
 import responseTransformer from "modules/trading/service/response-transformer";
 
 interface ITickHistoryPayload {
@@ -10,6 +11,7 @@ interface ITickHistoryPayload {
   end: string;
   start: number;
   style: string;
+  req_id?: number;
 }
 
 type SuccessCallback = (data: any) => any;
@@ -69,59 +71,58 @@ class TradingService {
     });
   }
 
-  static subscribeTicks(
-    tickHistoryRequestPayload: ITickHistoryPayload,
-    successCallback: SuccessCallback,
-    errorCallback: ErrorCallback
-  ) {
+  static subscribeTicks(tickHistoryRequestPayload: ITickHistoryPayload) {
     const req_id = generateRandomId();
     const requestPayload = {
-      req_id,
       ...tickHistoryRequestPayload,
+      req_id,
+      subscribe: 1,
     };
-    const messageType = "ohlc";
-
-    const tickSubscriber = () =>
-      derivService.derivAPI.subscribe(requestPayload);
+    const request = new BehaviorSubject<any>(undefined);
 
     const messageReceiveCallback = (message: MessageEvent<any>) => {
       try {
         const data = JSON.parse(message.data);
+        const messageType = "ohlc";
         const response = responseUtil.validateResponse({
           data,
           messageType,
           id: req_id,
         });
-
         if (response.isEqualToMessageType) {
           if (response.hasError) {
             derivService.socketConnection.removeEventListener(
               "message",
               messageReceiveCallback
             );
+            request.error(new Error());
           }
           const transformedData =
             responseTransformer.symbolStreamTransformer(data);
-          successCallback(transformedData);
+          request.next(transformedData);
         }
       } catch (error) {
-        console.log("error", error);
+        derivService.socketConnection.removeEventListener(
+          "message",
+          messageReceiveCallback,
+          false
+        );
+        request.error(error);
       }
     };
+    derivService.socketConnection.addEventListener(
+      "message",
+      messageReceiveCallback
+    );
+    derivService.derivAPI.ticksHistory(requestPayload);
     return {
-      subscribe: async () => {
-        derivService.socketConnection.addEventListener(
+      observable: request.asObservable(),
+      unsubscribe: () => {
+        derivService.socketConnection.removeEventListener(
           "message",
           messageReceiveCallback
         );
-        await tickSubscriber();
-      },
-      unsubscribe: async () => {
-        // derivService.socketConnection.removeEventListener(
-        //   "message",
-        //   messageReceiveCallback
-        // );
-        await tickSubscriber().unsubscribe();
+        request.complete();
       },
     };
   }

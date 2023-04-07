@@ -15,10 +15,7 @@ interface IProps {
 const TradingHistoryRealTime = (props: IProps) => {
   const { symbol } = props;
   const [tradingData, setTradingLiveData] = useState<ISymbolTrade | null>(null);
-  const successCallback = (data: ISymbolTrade) => {
-    setTradingLiveData(data);
-  };
-  const errorCallback = () => {};
+
   useEffect(() => {
     const requestPayload = {
       ticks_history: symbol.symbol,
@@ -30,15 +27,14 @@ const TradingHistoryRealTime = (props: IProps) => {
       subscribe: 1,
     };
 
-    const { subscribe, unsubscribe } = TradingService.subscribeTicks(
-      requestPayload,
-      successCallback,
-      errorCallback
-    );
-    subscribe();
-    console.log("subscribe");
+    const { observable, unsubscribe } =
+      TradingService.subscribeTicks(requestPayload);
+    observable.subscribe((data) => {
+      console.log("data", data);
+      setTradingLiveData(data);
+    });
+
     return () => {
-      console.log("unsubscribe");
       unsubscribe();
     };
   }, [symbol]);
