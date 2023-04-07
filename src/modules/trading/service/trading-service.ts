@@ -1,21 +1,20 @@
 import derivService from "common/services/deriv.service";
 import { generateRandomId } from "common/utils/";
 import responseUtil from "common/utils/response.util";
-import { Observable, BehaviorSubject } from "rxjs";
+import { Subject } from "rxjs";
 import responseTransformer from "modules/trading/service/response-transformer";
+import { ISymbol } from "common/models/symbol.model";
+import { ICandle } from "common/models/candle.model";
 
 interface ITickHistoryPayload {
   ticks_history: string;
   adjust_start_time: number;
   count: number;
-  end: string;
+  end: string | number;
   start: number;
   style: string;
   req_id?: number;
 }
-
-type SuccessCallback = (data: any) => any;
-type ErrorCallback = () => void;
 
 export interface IRequestPayloadForActiveSymbols {
   activeSymbols: string;
@@ -23,10 +22,16 @@ export interface IRequestPayloadForActiveSymbols {
 }
 
 class TradingService {
+  /**
+   * This function will return list of active symbols
+   * @param IRequestPayloadForActiveSymbols
+   * @returns
+   */
+
   static async retrieveSymbols({
     activeSymbols,
     productType,
-  }: IRequestPayloadForActiveSymbols) {
+  }: IRequestPayloadForActiveSymbols): Promise<ISymbol[]> {
     const req_id = generateRandomId();
     const apiPayload = {
       req_id,
@@ -49,6 +54,7 @@ class TradingService {
                 "message",
                 messageReceiveCallback
               );
+              reject(new Error());
             }
             const transformedData =
               responseTransformer.activeSymbolApiResponseTransformer(data);
@@ -70,7 +76,66 @@ class TradingService {
       derivService.derivAPI.activeSymbols(apiPayload);
     });
   }
+  /**
+   * This function will return the history of particular symbol
+   * @param ITickHistoryPayload
+   * @returns
+   */
 
+  static async retrieveTicksHistory(
+    apiQueryParam: ITickHistoryPayload
+  ): Promise<ICandle[]> {
+    const req_id = generateRandomId();
+    const apiPayload = {
+      ...apiQueryParam,
+      req_id,
+    };
+    return new Promise((resolve, reject) => {
+      const messageReceiveCallback = (message: MessageEvent<any>) => {
+        try {
+          const data = JSON.parse(message.data);
+          console.log("apiQueryParam", apiQueryParam.ticks_history);
+          console.log("req", req_id);
+          console.log("data", data);
+          const messageType = "candles";
+          const response = responseUtil.validateResponse({
+            data,
+            messageType,
+            id: req_id,
+          });
+
+          if (response.isEqualToMessageType) {
+            if (response.hasError) {
+              derivService.socketConnection.removeEventListener(
+                "message",
+                messageReceiveCallback
+              );
+              reject(new Error());
+            }
+            derivService.socketConnection.removeEventListener(
+              "message",
+              messageReceiveCallback
+            );
+            resolve(data.candles);
+          }
+        } catch (error) {
+          console.log("error");
+          reject(error);
+        }
+      };
+      derivService.socketConnection.addEventListener(
+        "message",
+        messageReceiveCallback
+      );
+      derivService.derivAPI.ticksHistory(apiPayload);
+    });
+  }
+
+  /**
+   * This function will return real time trade updates
+   * @param ITickHistoryPayload
+   * @returns
+   */
   static subscribeTicks(tickHistoryRequestPayload: ITickHistoryPayload) {
     const req_id = generateRandomId();
     const requestPayload = {
@@ -78,8 +143,7 @@ class TradingService {
       req_id,
       subscribe: 1,
     };
-    const request = new BehaviorSubject<any>(undefined);
-
+    const request = new Subject<any>();
     const messageReceiveCallback = (message: MessageEvent<any>) => {
       try {
         const data = JSON.parse(message.data);
@@ -116,7 +180,7 @@ class TradingService {
     );
     derivService.derivAPI.ticksHistory(requestPayload);
     return {
-      observable: request.asObservable(),
+      observable: request,
       unsubscribe: () => {
         derivService.socketConnection.removeEventListener(
           "message",

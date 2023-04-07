@@ -1,6 +1,6 @@
 import map from "lodash/map";
 import { ISymbol } from "common/models/symbol.model";
-import { ISymbolTrade } from "common/models/symol-trade";
+import { ISymbolTrade } from "common/models/symbol-trade.model";
 
 class RequestTransformer {
   static activeSymbolApiResponseTransformer(data: any): ISymbol[] {

@@ -14,6 +14,7 @@ import Divider from "@mui/material/Divider";
 import { grey } from "@mui/material/colors";
 
 import TradingSymbols from "modules/trading/components/TradingSymbols.component";
+import { ISymbol } from "common/models/symbol.model";
 
 const TradingPage = () => {
   const [parentTabSelectedIndex, setParentTabSelectedIndex] = useState(0);
@@ -22,13 +23,16 @@ const TradingPage = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { isLoading, error, data } = useQuery<any>(["retrieveSymbols"], () => {
-    const payload = {
-      activeSymbols: "brief",
-      productType: "basic",
-    };
-    return TradingService.retrieveSymbols(payload);
-  });
+  const { isLoading, error, data } = useQuery<ISymbol[]>(
+    ["retrieveSymbols"],
+    () => {
+      const payload = {
+        activeSymbols: "brief",
+        productType: "basic",
+      };
+      return TradingService.retrieveSymbols(payload);
+    }
+  );
 
   const activeSymbols: IMarket[] = useMemo(() => {
     return businessLayer.prepareActiveSymbolApiResponseForView(data);

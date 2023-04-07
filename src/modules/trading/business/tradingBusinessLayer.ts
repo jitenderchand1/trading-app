@@ -4,7 +4,9 @@ import { IMarket, ISubMarket } from "common/models/trading-market.model";
 import { ISymbol } from "common/models/symbol.model";
 
 class BusinessLayer {
-  static prepareActiveSymbolApiResponseForView(data: ISymbol[]): IMarket[] {
+  static prepareActiveSymbolApiResponseForView(
+    data: ISymbol[] | undefined
+  ): IMarket[] {
     if (!data) {
       return [];
     }
