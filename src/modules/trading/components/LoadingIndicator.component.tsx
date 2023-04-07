@@ -1,9 +1,25 @@
-import { Skeleton } from "@mui/material";
+import { Box, Skeleton, Stack, Divider } from "@mui/material";
 
-export const LoadingIndicator = () => {
+const LoadingIndicator = () => {
   return (
-    <>
-      <Skeleton />
-    </>
+    <Box>
+      <Stack direction="row" spacing={2}>
+        <Skeleton width={100} height={60} />
+        <Skeleton width={100} height={60} />
+        <Skeleton width={100} height={60} />
+        <Skeleton width={100} height={60} />
+        <Skeleton width={100} height={60} />
+        <Skeleton width={100} height={60} />
+      </Stack>
+      <Divider />
+      <Stack mt={1}>
+        <Skeleton height={20} />
+        <Skeleton height={20} />
+        <Skeleton height={20} />
+        <Skeleton height={20} />
+      </Stack>
+    </Box>
   );
 };
+
+export default LoadingIndicator;

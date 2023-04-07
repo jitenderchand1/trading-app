@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import { ICandle } from "common/models/candle.model";
 import { red, green } from "@mui/material/colors";
+import reduce from "lodash/reduce";
 import {
   AreaChart,
   Area,
@@ -14,6 +15,8 @@ import {
   Dot,
   DotProps,
   Cell,
+  ReferenceDot,
+  XAxis,
 } from "recharts";
 
 interface IProps {
@@ -23,13 +26,28 @@ interface IProps {
 
 const ChartComponent: FunctionComponent<IProps> = (props: IProps) => {
   const { tradingHistory, priceDifference } = props;
-  const maxY = Math.max(...tradingHistory.map((row) => row.close));
+
+  const min = reduce(tradingHistory, (acc, datum) => {
+    if (datum.close < acc.close) {
+      return datum;
+    }
+
+    return acc;
+  });
+  const max = reduce(tradingHistory, (acc, datum) => {
+    if (datum.close > acc.close) {
+      return datum;
+    }
+    return acc;
+  });
+
   return (
     <div>
       <LineChart width={300} height={50} data={tradingHistory}>
         <Tooltip />
         <YAxis domain={["dataMin", "dataMax"]} hide />
-        <Dot cy={maxY} cx={100} r={4} />
+        <XAxis dataKey="epoch" hide />
+
         <Line
           strokeWidth={2}
           type="monotone"
@@ -37,6 +55,8 @@ const ChartComponent: FunctionComponent<IProps> = (props: IProps) => {
           stroke={priceDifference > 0 ? green[500] : red[500]}
           dot={false}
         />
+        <ReferenceDot y={max?.close} x={max?.epoch} r={5} fill={"black"} />
+        <ReferenceDot y={min?.close} x={min?.epoch} r={5} fill={"black"} />
       </LineChart>
     </div>
   );

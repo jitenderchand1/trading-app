@@ -54,7 +54,7 @@ class TradingService {
                 "message",
                 messageReceiveCallback
               );
-              reject(new Error());
+              reject(data);
             }
             const transformedData =
               responseTransformer.activeSymbolApiResponseTransformer(data);
