@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import map from "lodash/map";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,14 +7,6 @@ import TableRow from "@mui/material/TableRow";
 import { ISymbol } from "common/models/symbol.model";
 import TradingHistoryRealTime from "modules/trading/components/TradingHistoryRealTime.component";
 import { Th } from "common/components/Table.component";
-
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
-}
 
 interface IProps {
   symbols: ISymbol[];

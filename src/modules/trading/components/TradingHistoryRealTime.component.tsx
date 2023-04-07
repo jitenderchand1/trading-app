@@ -23,22 +23,21 @@ const TradingHistoryRealTime = (props: IProps) => {
   const [latestTradingData, setLatestTradingDataTradingLiveData] =
     useState<ISymbolTrade | null>(null);
 
-  const {
-    isLoading,
-    error,
-    data: tradeHistory,
-  } = useQuery<ICandle[]>(["retrieveTicksHistory", symbol.symbol], () => {
-    const startTime = moment().subtract(24, "hour").unix();
-    const payload = {
-      ticks_history: symbol.symbol,
-      adjust_start_time: 1,
-      count: 5000,
-      end: "latest",
-      start: startTime,
-      style: "candles",
-    };
-    return TradingService.retrieveTicksHistory(payload);
-  });
+  const { data: tradeHistory } = useQuery<ICandle[]>(
+    ["retrieveTicksHistory", symbol.symbol],
+    () => {
+      const startTime = moment().subtract(24, "hour").unix();
+      const payload = {
+        ticks_history: symbol.symbol,
+        adjust_start_time: 1,
+        count: 5000,
+        end: "latest",
+        start: startTime,
+        style: "candles",
+      };
+      return TradingService.retrieveTicksHistory(payload);
+    }
+  );
 
   useEffect(() => {
     const requestPayload = {

@@ -2,22 +2,7 @@ import { FunctionComponent } from "react";
 import { ICandle } from "common/models/candle.model";
 import { red, green } from "@mui/material/colors";
 import reduce from "lodash/reduce";
-import {
-  AreaChart,
-  Area,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  ReferenceLine,
-  Label,
-  Dot,
-  DotProps,
-  Cell,
-  ReferenceDot,
-  XAxis,
-} from "recharts";
+import { YAxis, Tooltip, LineChart, Line, ReferenceDot, XAxis } from "recharts";
 
 interface IProps {
   tradingHistory: ICandle[];
