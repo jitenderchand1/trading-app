@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/trading-app/static/css/main.9d893346.css",
-    "main.js": "/trading-app/static/js/main.bd04cf39.js",
-    "static/js/873.76f0f0e9.chunk.js": "/trading-app/static/js/873.76f0f0e9.chunk.js",
-    "static/js/787.e685fa0a.chunk.js": "/trading-app/static/js/787.e685fa0a.chunk.js",
-    "static/js/671.9de5d65a.chunk.js": "/trading-app/static/js/671.9de5d65a.chunk.js",
-    "index.html": "/trading-app/index.html",
-    "main.9d893346.css.map": "/trading-app/static/css/main.9d893346.css.map",
-    "main.bd04cf39.js.map": "/trading-app/static/js/main.bd04cf39.js.map",
-    "873.76f0f0e9.chunk.js.map": "/trading-app/static/js/873.76f0f0e9.chunk.js.map",
-    "787.e685fa0a.chunk.js.map": "/trading-app/static/js/787.e685fa0a.chunk.js.map",
-    "671.9de5d65a.chunk.js.map": "/trading-app/static/js/671.9de5d65a.chunk.js.map"
+    "main.css": "/static/css/main.9d893346.css",
+    "main.js": "/static/js/main.310a59d4.js",
+    "static/js/873.a35f0175.chunk.js": "/static/js/873.a35f0175.chunk.js",
+    "static/js/787.e685fa0a.chunk.js": "/static/js/787.e685fa0a.chunk.js",
+    "static/js/671.9de5d65a.chunk.js": "/static/js/671.9de5d65a.chunk.js",
+    "index.html": "/index.html",
+    "main.9d893346.css.map": "/static/css/main.9d893346.css.map",
+    "main.310a59d4.js.map": "/static/js/main.310a59d4.js.map",
+    "873.a35f0175.chunk.js.map": "/static/js/873.a35f0175.chunk.js.map",
+    "787.e685fa0a.chunk.js.map": "/static/js/787.e685fa0a.chunk.js.map",
+    "671.9de5d65a.chunk.js.map": "/static/js/671.9de5d65a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9d893346.css",
-    "static/js/main.bd04cf39.js"
+    "static/js/main.310a59d4.js"
   ]
 }
