@@ -28,7 +28,9 @@ usable web pages.
 In the project directory, you can run:
 
 1. `npm install`
-2. `npm run start:dev`
+2. `npm run start:dev` (Runs the app in the development mode.)
+
+Open http://localhost:3000 to view it in your browser.
 
 ## Steps to build the application
 
