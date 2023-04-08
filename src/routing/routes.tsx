@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import routesConfig from "routing/routes-config";
+import { Box } from "@mui/material";
 import map from "lodash/map";
-import { PageLoadingIndicator } from "layouts/PageLoadingIndication";
+import LoadingIndicator from "modules/trading/components/LoadingIndicator.component";
 import AppLayout from "layouts/AppLayout";
 
 const AppRoutes = () => {
@@ -15,7 +16,13 @@ const AppRoutes = () => {
               key={index}
               path={datum.path}
               element={
-                <Suspense fallback={<PageLoadingIndicator />}>
+                <Suspense
+                  fallback={
+                    <Box className="page-content">
+                      <LoadingIndicator />
+                    </Box>
+                  }
+                >
                   <datum.component />
                 </Suspense>
               }
