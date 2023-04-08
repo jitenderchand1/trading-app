@@ -39,3 +39,4 @@ In the project directory, you can run:
 
 - ReactJS
 - WebSocket
+- TypeScript
