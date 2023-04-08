@@ -38,3 +38,4 @@ In the project directory, you can run:
 ## Tech Stack
 
 - ReactJS
+- WebSocket
