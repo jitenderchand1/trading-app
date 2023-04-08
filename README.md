@@ -2,30 +2,33 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Install Dependency
+Design and implement a frontend to display an asset list
+Assets are types of trades that are available to trade on using the Deriv platform. Deriv offers
+public API’s that can be accessed to query and initiate trades. Using these, please design and
+implement a small web-based solution that satisfies the requirements below taking into account
+any specific considerations you think is appropriate when developing high-performing and
+usable web pages.
+
+## Asset list high-level requirements
+
+- :white_check_mark: As a user, I can filter the asset list by category (e.g Forex, Stock indices etc) and
+  sub-category (e.g. Major pairs), so that I can find assets that match what I’m looking for.
+- As a user, I can see real
+  time prices for each asset, so that I can decide which one I
+  want to trade on.
+- As a user, I can see the highest and lowest price in the last 24 hour period, so that I can
+  see the fluctuations over the day.
+- As a user, I can see the highest and lowest price in a mini chart, so that I can visualize
+  the price changes.
+
+## Steps to run the application locally
 
 In the project directory, you can run:
 
-### `npm install`
+1. `npm install`
+2. `npm start:dev`
 
-## Available Scripts
+## Steps to build the application
 
-In the project directory, you can run:
-
-### `npm start:dev`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. `npm build`
+   In the project directory, you can run:
