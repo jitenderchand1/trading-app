@@ -40,25 +40,27 @@ const TradingHistoryRealTime = (props: IProps) => {
   );
 
   useEffect(() => {
-    const requestPayload = {
-      ticks_history: symbol.symbol,
-      adjust_start_time: 1,
-      count: 10,
-      end: "latest",
-      start: 1,
-      style: "candles",
-      subscribe: 1,
-    };
-    const { observable, unsubscribe } =
-      TradingService.subscribeTicks(requestPayload);
+    if (symbol.exchange_is_open && !symbol.is_trading_suspended) {
+      const requestPayload = {
+        ticks_history: symbol.symbol,
+        adjust_start_time: 1,
+        count: 10,
+        end: "latest",
+        start: 1,
+        style: "candles",
+        subscribe: 1,
+      };
+      const { observable, unsubscribe } =
+        TradingService.subscribeTicks(requestPayload);
 
-    observable.subscribe((data) => {
-      setLatestTradingDataTradingLiveData(data);
-    });
+      observable.subscribe((data) => {
+        setLatestTradingDataTradingLiveData(data);
+      });
 
-    return () => {
-      unsubscribe();
-    };
+      return () => {
+        unsubscribe();
+      };
+    }
   }, [symbol]);
 
   let priceDifference = 0;

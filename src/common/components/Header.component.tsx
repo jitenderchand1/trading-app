@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import AppBar from "@mui/material/AppBar";
 import DerivLogo from "assets/images/logo.png";
 import styled from "styled-components";
